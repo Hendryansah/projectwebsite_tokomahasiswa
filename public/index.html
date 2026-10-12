@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X-Store — Premium Digital Store & Instant Delivery</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container nav-wrap">
+      <a href="/" class="brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>X-STORE</h1>
+          <span>Premium Digital</span>
+        </div>
+      </a>
+
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Cari Netflix, Spotify, Canva Pro, CapCut..." />
+      </div>
+
+      <div class="nav-actions">
+        <!-- Saldo Pill (Hanya muncul jika login) -->
+        <div class="saldo-pill" id="saldoWrap" style="display: none;">
+          <div class="saldo-dot"></div>
+          <span id="userSaldo">Rp 0</span>
+          <button class="btn-topup-mini" onclick="openTopupModal()">+ Isi Saldo</button>
+        </div>
+
+        <!-- Tombol Riwayat Pesanan -->
+        <button class="btn btn-outline" onclick="openHistoryModal()" title="Riwayat Pesanan">
+          📦 Tas / Riwayat
+        </button>
+
+        <!-- Tombol Auth / Masuk -->
+        <button class="btn btn-primary" id="authBtn" onclick="openModal('authModal')">
+          Masuk / Daftar
+        </button>
+
+        <!-- Profil User Dropdown Button -->
+        <button class="btn btn-outline" id="userBtn" style="display: none;" onclick="openHistoryModal()">
+          👤 <span id="userNameDisplay">Akun</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-content">
+          <h2>Akun Premium Digital Siap Pakai.<br>Langsung Kirim Detik Ini Juga.</h2>
+          <p>
+            Platform resmi pembelian akun streaming, editing, dan AI tools. Otomatisasi pengiriman 24/7 langsung ke layar Anda dan salinan lengkap ke email.
+          </p>
+          <div class="hero-features">
+            <span class="feat-item">⚡ Pengiriman Instan Otomatis</span>
+            <span class="feat-item">🛡️ Garansi Penggantian</span>
+            <span class="feat-item">💳 Bayar Cepat QRIS & Saldo</span>
+            <span class="feat-item">📧 Bukti Terkirim ke Email</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KATEGORI PRODUK TABS -->
+    <section class="category-tabs">
+      <button class="cat-btn active" data-cat="Semua">Semua Produk</button>
+      <button class="cat-btn" data-cat="Streaming">Streaming & Film</button>
+      <button class="cat-btn" data-cat="Editing">Desain & Editing</button>
+      <button class="cat-btn" data-cat="Musik">Musik</button>
+      <button class="cat-btn" data-cat="AI & Produktivitas">AI & Tools</button>
+    </section>
+
+    <!-- ETALASE PRODUK GRID -->
+    <section class="products-grid" id="productsGrid">
+      <!-- Diisi oleh app.js -->
+    </section>
+  </main>
+
+  <!-- ==================== MODAL CHECKOUT PEMBELIAN ==================== -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalProductTitle">Beli Produk</h3>
+        <button class="btn-close" onclick="closeModal('checkoutModal')">&times;</button>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">1. Pilih Varian / Paket:</label>
+        <div class="variant-list" id="variantList">
+          <!-- Diisi otomatis oleh app.js -->
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">2. Email Pengiriman Akun (Wajib):</label>
+        <input type="email" id="buyerEmailInput" class="input-box" placeholder="contoh: emailkamu@gmail.com" />
+        <span style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px; display: block;">
+          Akun dan bukti pembelian akan dikirimkan otomatis ke alamat email ini.
+        </span>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">3. Metode Pembayaran:</label>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label style="display: flex; align-items: center; gap: 10px; background: #090d16; padding: 12px; border-radius: 8px; border: 1px solid #1e293b; cursor: pointer;">
+            <input type="radio" name="payMethod" id="payMethodQris" value="qris" checked />
+            <div>
+              <div style="font-weight: 700; font-size: 0.88rem;">💳 QRIS Dinamis (Semua Bank / E-Wallet)</div>
+              <div style="font-size: 0.75rem; color: #94a3b8;">BCA, DANA, GoPay, OVO, ShopeePay, Mandiri, BRI</div>
+            </div>
+          </label>
+
+          <label style="display: flex; align-items: center; gap: 10px; background: #090d16; padding: 12px; border-radius: 8px; border: 1px solid #1e293b; cursor: pointer;">
+            <input type="radio" name="payMethod" id="payMethodSaldo" value="saldo" />
+            <div>
+              <div style="font-weight: 700; font-size: 0.88rem;">💰 Potong Saldo Akun (Instan 1-Klik)</div>
+              <div style="font-size: 0.75rem; color: #94a3b8;" id="saldoLabelDesc">Saldo Anda: Rp 0</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div style="margin: 20px 0; padding-top: 14px; border-top: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: #94a3b8; font-size: 0.9rem;">Total Tagihan:</span>
+        <span style="font-size: 1.35rem; font-weight: 800; color: #38bdf8;" id="orderTotalDisplay">Rp 0</span>
+      </div>
+
+      <button class="btn btn-primary" id="btnSubmitOrder" style="width: 100%; padding: 12px;" onclick="submitOrder()">
+        Bayar Sekarang
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL PEMBAYARAN QRIS ==================== -->
+  <div class="modal-overlay" id="qrisModal">
+    <div class="modal-box" style="text-align: center;">
+      <div class="modal-header">
+        <h3 class="modal-title">Scan QRIS untuk Membayar</h3>
+        <button class="btn-close" onclick="closeModal('qrisModal')">&times;</button>
+      </div>
+
+      <div class="qris-display">
+        <div style="font-size: 0.82rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; text-transform: uppercase;">
+          MUHAMMAD ILHAM HENDRYANSAH
+        </div>
+        <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 8px;">
+          NMID: ID1026613986334
+        </div>
+        <img id="qrisImageEl" src="" alt="Kode QRIS" />
+      </div>
+
+      <div class="qris-amount" id="qrisNominalText">Rp 0</div>
+      <div style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 6px;">Ref ID: <span id="qrisRefText" style="color:#f8fafc; font-weight:bold;">-</span></div>
+      <div class="qris-status" id="qrisStatusText">Buka BCA Mobile, GoPay, DANA, OVO, ShopeePay & Scan QRIS di atas</div>
+
+      <!-- Indikator Deteksi Otomatis Real-Time -->
+      <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 14px; margin-top: 14px; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span style="display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 1.5s infinite;"></span>
+          <span style="font-size: 0.82rem; font-weight: 700; color: #10b981;">Pendeteksi Otomatis Aktif</span>
+        </div>
+        <p style="font-size: 0.78rem; color: #94a3b8; line-height: 1.4; margin: 0 0 10px 0;">
+          Setelah Anda selesai membayar di aplikasi m-banking atau e-wallet, sistem akan mendeteksi otomatis dalam 2–5 detik. Layar ini akan langsung berganti menampilkan akun Anda.
+        </p>
+        <button class="btn btn-outline" style="width: 100%; font-size: 0.8rem; padding: 8px;" onclick="manualCheckStatus()">
+          🔄 Cek Status Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL AKUN KELUAR (DELIVERY INSTAN) ==================== -->
+  <div class="modal-overlay" id="deliveryModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #10b981;">🎉 Pesanan Anda Berhasil!</h3>
+        <button class="btn-close" onclick="closeModal('deliveryModal')">&times;</button>
+      </div>
+
+      <p style="font-size: 0.88rem; color: #94a3b8;">
+        Terima kasih! Pesanan <strong id="deliveredOrderId">#</strong> telah lunas. Kredensial akun siap digunakan di bawah ini:
+      </p>
+
+      <div class="creds-box" id="deliveredCredsContent">
+        <!-- Akun email & password -->
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="copyCredentials()">
+        📋 Salin Akun ke Clipboard
+      </button>
+
+      <div style="font-size: 0.78rem; color: #94a3b8; text-align: center; line-height: 1.5;">
+        📧 Salinan akun dan bukti pembayaran juga sudah otomatis dikirimkan ke email Anda. Cek juga folder Spam jika tidak terlihat.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL TOP-UP SALDO ==================== -->
+  <div class="modal-overlay" id="topupModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">💰 Isi Saldo Dompet</h3>
+        <button class="btn-close" onclick="closeModal('topupModal')">&times;</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 14px;">
+        Pilih nominal cepat atau masukkan jumlah top-up yang diinginkan:
+      </p>
+
+      <!-- Preset Nominal Cepat -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;">
+        <button class="btn btn-outline" type="button" onclick="setTopupAmount(10000)">Rp 10.000</button>
+        <button class="btn btn-outline" type="button" onclick="setTopupAmount(25000)">Rp 25.000</button>
+        <button class="btn btn-outline" type="button" onclick="setTopupAmount(50000)">Rp 50.000</button>
+        <button class="btn btn-outline" type="button" onclick="setTopupAmount(100000)">Rp 100.000</button>
+        <button class="btn btn-outline" type="button" onclick="setTopupAmount(200000)">Rp 200.000</button>
+        <button class="btn btn-outline" type="button" onclick="setTopupAmount(500000)">Rp 500.000</button>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Nominal Kustom (Rp):</label>
+        <input type="number" id="topupAmountInput" class="input-box" placeholder="Minimal Rp 5.000" min="5000" />
+      </div>
+
+      <button class="btn btn-primary" id="btnSubmitTopup" style="width: 100%; padding: 12px;" onclick="submitTopup()">
+        Lanjut Bayar QRIS
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL RIWAYAT & MUTASI ==================== -->
+  <div class="modal-overlay" id="historyModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">📦 Riwayat Transaksi & Akun</h3>
+        <button class="btn-close" onclick="closeModal('historyModal')">&times;</button>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 8px; color: #38bdf8;">Daftar Akun yang Dibeli:</h4>
+        <div id="historyOrdersList" style="max-height: 180px; overflow-y: auto;"></div>
+      </div>
+
+      <div style="border-top: 1px solid #1e293b; padding-top: 14px; margin-bottom: 16px;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 8px; color: #10b981;">Mutasi Saldo Dompet:</h4>
+        <div id="historyLogsList" style="max-height: 180px; overflow-y: auto;"></div>
+      </div>
+
+      <button class="btn btn-outline" style="width: 100%; border-color: #f43f5e; color: #f43f5e;" onclick="logout()">
+        🚪 Keluar dari Akun (Logout)
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL AUTH LOGIN / REGISTER ==================== -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="authTitle">Masuk ke Akun</h3>
+        <button class="btn-close" onclick="closeModal('authModal')">&times;</button>
+      </div>
+
+      <div id="authRegisterFields" style="display: none;" class="field-group">
+        <label class="field-label">Nama Lengkap:</label>
+        <input type="text" id="authName" class="input-box" placeholder="Nama Anda" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Email:</label>
+        <input type="email" id="authEmail" class="input-box" placeholder="email@gmail.com" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Kata Sandi:</label>
+        <input type="password" id="authPassword" class="input-box" placeholder="Minimal 6 karakter" />
+      </div>
+
+      <button class="btn btn-primary" id="btnAuthAction" style="width: 100%; padding: 11px; margin-top: 6px;" onclick="handleAuthSubmit('login')">
+        Masuk
+      </button>
+
+      <div style="text-align: center; margin-top: 16px; font-size: 0.84rem; color: #94a3b8;">
+        <span id="authToggleText">Belum punya akun?</span>
+        <a href="#" id="authToggleLink" style="color: #38bdf8; font-weight: bold; text-decoration: none;" onclick="toggleAuthMode(); return false;">Daftar Sekarang</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toastNotification">Notifikasi</div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    let isRegisterMode = false;
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      document.getElementById('authRegisterFields').style.display = isRegisterMode ? 'block' : 'none';
+      document.getElementById('authTitle').textContent = isRegisterMode ? 'Daftar Akun Baru' : 'Masuk ke Akun';
+      document.getElementById('btnAuthAction').textContent = isRegisterMode ? 'Daftar' : 'Masuk';
+      document.getElementById('btnAuthAction').setAttribute('onclick', isRegisterMode ? "handleAuthSubmit('register')" : "handleAuthSubmit('login')");
+      document.getElementById('authToggleText').textContent = isRegisterMode ? 'Sudah punya akun?' : 'Belum punya akun?';
+      document.getElementById('authToggleLink').textContent = isRegisterMode ? 'Masuk di Sini' : 'Daftar Sekarang';
+    }
+  </script>
+</body>
+</html>
